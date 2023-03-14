@@ -62,13 +62,13 @@ class LivreController extends AbstractController
     }
 
     /**
-     * @Route("/livre/update/{id}", name="livre_update")
+     * @Route("/livre/update/{id}", name="livreupdate")
      */
     public function updateLivre($id): Response
     {
-        $query = "UPDATE livre SET titre = 'Aperiendum est igitur' WHERE id = $id;
-              UPDATE Livre_Genre SET genre_id = 5 WHERE livre_id = $id;";
-        $result = $this->db->executeQuery($query);
+        
+        $livre = $this->db->executeQuery("UPDATE livre SET titre = 'Aperiendum est igitur' WHERE id = $id;
+        UPDATE Livre_Genre SET genre_id = 5 WHERE livre_id = $id");
 
         return new Response('Le livre a été mis à jour avec succès');
     }
