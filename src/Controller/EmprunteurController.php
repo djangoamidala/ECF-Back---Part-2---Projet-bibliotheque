@@ -93,7 +93,7 @@ class EmprunteurController extends AbstractController
     public function EmpruntSet(): Response
     {
         $emprunteur = $this->db->fetchAllAssociative("UPDATE emprunt SET date_retour = '2020-05-01 10:00:00' WHERE id = 3;");
-        return new Response('Le livre a été inséré avec succès');
+        return new Response('Le livre a été mis à jour avec succès');
     }
 }
 
