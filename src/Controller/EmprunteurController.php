@@ -84,7 +84,7 @@ class EmprunteurController extends AbstractController
     public function EmpruntCreate(): Response
     {
         $emprunteur = $this->db->fetchAllAssociative("INSERT INTO emprunt (date_emprunt, date_retour, emprunteur_id, livre_id) VALUES ('2020-12-01 16:00:00', NULL, 1, 1)");
-        return new Response('L\emprunt a été inséré avec succès');
+        return new Response('L\'emprunt a été inséré avec succès');
     }
 
     /**
