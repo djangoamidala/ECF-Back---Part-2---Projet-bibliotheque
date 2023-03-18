@@ -84,7 +84,7 @@ class EmprunteurController extends AbstractController
     public function EmpruntCreate(): Response
     {
         $emprunteur = $this->db->fetchAllAssociative("INSERT INTO emprunt (date_emprunt, date_retour, emprunteur_id, livre_id) VALUES ('2020-12-01 16:00:00', NULL, 1, 1)");
-        return new Response('Le livre a été inséré avec succès');
+        return new Response('L\emprunt a été inséré avec succès');
     }
 
     /**
@@ -93,7 +93,7 @@ class EmprunteurController extends AbstractController
     public function EmpruntSet(): Response
     {
         $emprunteur = $this->db->fetchAllAssociative("UPDATE emprunt SET date_retour = '2020-05-01 10:00:00' WHERE id = 3;");
-        return new Response('Le livre a été mis à jour avec succès');
+        return new Response('L\'emprunt a été mis à jour avec succès');
     }
 }
 
