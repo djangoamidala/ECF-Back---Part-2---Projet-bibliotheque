@@ -27,7 +27,17 @@ class UserController extends AbstractController
 
         return $this->json($users);
     }
+    /**
+     * @Route("/users/role", name="roleuser")
+     */
+    public function listByRoleUser(): Response
+    {
 
+        $user = $this->db->fetchAllAssociative('SELECT * FROM user WHERE roles LIKE "%ROLE_USER%"');
+
+        return $this->json($user);
+    }
+    
     /**
      * @Route("/users/{id}", name="usershow")
      */
@@ -49,25 +59,6 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
-  /**
-     * @Route("/users/role", name="roleuser")
-     */
-    public function listByRoleUser(): Response
-    {
-        
-        $users = $this->db->fetchAllAssociative('SELECT * FROM user WHERE roles LIKE "%ROLE_USER%" ' );
 
-            return $this->json($users);   
-    }
-   
 
-    /**
-     * @Route("/users/inactive", name="listinactive")
-     */
-    public function listInactive($id): Response
-    {
-        $users = $this->db->fetchAllAssociative('SELECT * FROM user WHERE enabled = 1 ');
-
-        return $this->json($users);
-    }
 }
