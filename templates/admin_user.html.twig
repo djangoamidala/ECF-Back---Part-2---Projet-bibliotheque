@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1>Liste des users</h1>
+
+    <table>
+        <thead>
+            {% for user in users %}
+            <tr>
+                <th>email</th>
+                <th>password</th>
+                <th>roles</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.roles }}</td>
+                 
+                    <td>
+                        <a href="{{ path('admin_user', {'id': user.id}) }}">Détails</a>
+                        <a href="{{ path('admin_user_edit', {'id': user.id}) }}">Modifier</a>
+                        <a href="{{ path('user_delete', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce user ?')">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

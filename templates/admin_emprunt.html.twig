@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1>Liste des emprunts</h1>
+
+    <table>
+        <thead>
+            {% for emprunt in emprunts %}
+            <tr>
+                <th>date_emprunt</th>
+                <th>date_retour</th>
+                <th>emprunteur_id</th>
+                <th>livre_id</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{ emprunt.date_emprunt }}</td>
+                    <td>{{ emprunt.date_retour }}</td>
+                    <td>{{ emprunt.emprunteur_id }}</td>
+                    <td>{{ emprunt.livre_id}}</td>
+                    <td>
+                        <a href="{{ path('admin_emprunt_details', {'id': emprunt.id}) }}">Détails</a>
+                        <a href="{{ path('admin_emprunteur_edit', {'id': emprunt.id}) }}">Modifier</a>
+                        <a href="{{ path('admin_emprunteur_delete', {'id': emprunt.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce emprunt ?')">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modifier le livre</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+<button><a href="{{ path('homepage') }}" style="text-decoration: none; color: inherit;">Annuler</a></button>
+
+    {{ form_end(form) }}
+{% endblock %}

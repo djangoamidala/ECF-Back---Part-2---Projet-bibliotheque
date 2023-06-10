@@ -95,5 +95,6 @@ class EmprunteurController extends AbstractController
         $emprunteur = $this->db->fetchAllAssociative("UPDATE emprunt SET date_retour = '2020-05-01 10:00:00' WHERE id = 3;");
         return new Response('L\'emprunt a été mis à jour avec succès');
     }
+ 
 }
 

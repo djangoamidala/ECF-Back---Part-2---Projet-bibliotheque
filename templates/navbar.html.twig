@@ -1,0 +1,15 @@
+<nav class="navbar">
+    <ul>
+        <li><a href="/">Accueil</a></li>
+        {% if not app.session.get('user') %}
+            <li><a href="{{ path('login')}}">Login</a></li>
+        {% else %}
+            {% if 'ROLE_ADMIN' in app.session.get('user')['roles'] %}
+                <li><a href="{{ path('admin_user')}}">Liste des utilisateurs</a></li>
+                <li><a href="{{ path('admin_livre')}}">Liste des livres</a></li>
+                <li><a href="{{ path('admin_emprunt')}}">Liste des emprunts</a></li>
+            {% endif %}
+            <li><a href="{{ path('logout')}}">Logout</a></li>
+        {% endif %}
+    </ul>
+</nav>

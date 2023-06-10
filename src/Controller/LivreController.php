@@ -37,7 +37,7 @@ class LivreController extends AbstractController
     }
 
     /**
-     * @Route("/test/livre/{id}", name="livredetails")
+     * @Route("/test/livre/{id}", name="livre_details")
      */
     public function details($id): Response
     {
@@ -74,7 +74,7 @@ class LivreController extends AbstractController
 
 
     /**
-     * @Route("/test/livre/update2/{id}", name="livreupdate")
+     * @Route("/test/livre/update/{id}", name="livre_update")
      */
     public function updateLivre($id): Response
     {
@@ -82,11 +82,12 @@ class LivreController extends AbstractController
         return new Response('Le livre a été mis à jour avec succès');
     }
 /**
- * @Route("/test/livre/delete/{id}", name="livredelete")
+ * @Route("/test/livre/delete/{id}", name="livre_delete")
  */
 public function deleteLivre($id): Response
 {
     $livre = $this->db->executeQuery("DELETE FROM livre WHERE id = $id");
     return new Response('Le livre a été supprimé avec succès');
 }
+ 
 }
