@@ -14,12 +14,18 @@ ECF permettant de gérer une bibliothèque avec l'empreint des livres par les ut
 ```shell 
 git clone https://github.com/djangoamidala/ECF-Back---Part-2-et-3---Projet-bibliotheque.git
 ```
-- Se rendre dans le dossier avec la commande cd ECF-Back---Part-2-et-3---Projet-bibliotheque
+- Se rendre dans le dossier avec la commande 
+```shell
+cd ECF-Back---Part-2-et-3---Projet-bibliotheque
+```
 - Exécuter la commande pour installé les dépendances
 ```shell
 composer install
 ```
-- configurer l'identifiant créer à l'ecf 1 dans le fichier .env à la ligne suivante: $ DATABASE_URL=mysql://votre_utilisateur:votre_mot_de_passe@localhost/votre_base_de_donnees 
+- configurer l'identifiant créer à l'ecf 1 dans le fichier .env à la ligne suivante: 
+```shell 
+DATABASE_URL=mysql://votre_utilisateur:votre_mot_de_passe@localhost/votre_base_de_donnees 
+```
 - Exécuter la commande pour démarrer le serveur
 ```shell
  symfony serve
