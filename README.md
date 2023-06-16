@@ -20,7 +20,11 @@ git clone https://github.com/djangoamidala/ECF-Back---Part-2-et-3---Projet-bibli
 composer install
 ```
 - configurer l'identifiant créer à l'ecf 1 dans le fichier .env à la ligne suivante: $ DATABASE_URL=mysql://votre_utilisateur:votre_mot_de_passe@localhost/votre_base_de_donnees 
-- Lancement du serveur avec symfony serve http://127.0.0.1:8000/
+- Exécuter la commande pour démarrer le serveur
+```shell
+ symfony serve
+``` 
+http://127.0.0.1:8000/
 - visité la route pour les données de test http://127.0.0.1:8000/generate-fake-data
 - Enjoy
     
