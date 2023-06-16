@@ -73,6 +73,42 @@ public function deleteLivre($id): Response
 }
 
 /**
+* @Route("/inscription", name="inscription")
+*/
+public function inscription(Request $request, Connection $connection): Response
+{
+// Vérifier si le formulaire d'inscription a été envoyé
+if ($request->isMethod('POST')) {
+$email = $request->request->get('_email');
+$password = $request->request->get('_password');
+ // Vérifier si l'utilisateur existe déjà dans la base de données
+ $query = 'SELECT * FROM user WHERE email = ?';
+ $params = [$email];
+ $existingUser = $connection->executeQuery($query, $params)->fetchAssociative();
+ 
+ if ($existingUser) {
+     // Utilisateur déjà enregistré
+     $error = 'Un compte avec cet email existe déjà.';
+ } else {
+     // Hasher le mot de passe
+     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+     
+     // Enregistrer le nouvel utilisateur dans la base de données
+     $insertQuery = 'INSERT INTO user (email, password, roles) VALUES (?, ?, ?)';
+     $insertParams = [$email, $hashedPassword, '["ROLE_USER"]'];
+     $connection->executeQuery($insertQuery, $insertParams);
+     
+     // Rediriger vers la page de connexion ou une autre page
+     return $this->redirectToRoute('login');
+ }
+}
+
+return $this->render('inscription.html.twig', [
+'error' => $error ?? null,
+]);
+}
+
+/**
  * @Route("/login", name="login")
  */
 public function login(Request $request, Connection $connection): Response

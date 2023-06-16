@@ -139,13 +139,13 @@ public function admin_user(Connection $connection, SessionInterface $session)
         // Créer le formulaire
         $form = $this->createFormBuilder($user)
             ->add('email', TextType::class, [
-                'label' => 'email :'
+                'label' => 'Email :'
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'password :'
+                'label' => 'Password :'
             ])
             ->add('roles', TextType::class, [
-                'label' => 'Nouveau titre :'
+                'label' => 'Roles :'
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer'

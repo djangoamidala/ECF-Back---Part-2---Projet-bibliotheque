@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Page de connexion</h1>
+
+    {% if error %}
+        <div>{{ error }}</div>
+    {% endif %}
+
+    <form action="{{ path('inscription') }}" method="post">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="_email" required autofocus>
+
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="_password" required>
+         <button type="submit">S'inscrire</button>
+    </form>
+{% endblock %}
