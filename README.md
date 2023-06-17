@@ -34,6 +34,8 @@ DATABASE_URL=mysql://votre_utilisateur:votre_mot_de_passe@localhost/votre_base_d
 http://127.0.0.1:8000/
 - visité la route pour les données de test 
 http://127.0.0.1:8000/generate-fake-data
+SI vous utilisez le fichier SQL pour insérer les données de test vous devez visité l'url pour crypter les mots de passe
+http://127.0.0.1:8000/update-passwords
 
 
 Les routes pour l'ecf 2 se trouvent dans les fichiers
