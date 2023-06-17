@@ -30,10 +30,19 @@ DATABASE_URL=mysql://votre_utilisateur:votre_mot_de_passe@localhost/votre_base_d
 ```shell
  symfony serve
 ``` 
+Le serveur démarre sur la route suivante par défaut
+```shell
 http://127.0.0.1:8000/
-- visité la route pour les données de test http://127.0.0.1:8000/generate-fake-data
-- Enjoy
-    
+```
+- visité la route pour les données de test 
+```shell
+http://127.0.0.1:8000/generate-fake-data
+```
+
+Les routes pour l'ecf 2 se trouvent dans les fichiers
+- UserController.php
+- EmprunteurController.php (possède également les requête d'emprunt)
+- LivreController.php
 
 
 
