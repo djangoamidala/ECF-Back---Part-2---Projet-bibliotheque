@@ -185,7 +185,7 @@ public function admin_user(Connection $connection, SessionInterface $session)
         ]);
     }
 
-
+// Cette fonction n'est plus utilisé car directement gérer dans faker mais peut être utilisé pour mettre à jour les mots de passe en brut
 /**
  * @Route("/update-passwords", name="update_passwords")
  */
@@ -268,7 +268,7 @@ public function adminEmprunteurEdit(Request $request, $id, Connection $connectio
         ])
         ->getForm();
 
-    // Gérer la soumission du formulaire
+    // Gérer l'envoi du formulaire
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
         // Mettre à jour les données de l'emprunteur dans la base de données
@@ -307,7 +307,7 @@ public function adminEmprunteurDelete($id, Connection $connection, SessionInterf
     // Supprimer l'emprunteur de la base de données
     $connection->executeQuery("DELETE FROM emprunteur WHERE id = ?", [$id]);
 
-    // Rediriger vers la page de liste des emprunteurs
+    // Rediriger vers la page de liste des emprunteurs (uniquement accessible par l'admin)
     return $this->redirectToRoute('admin_emprunteur');
 }
 }
