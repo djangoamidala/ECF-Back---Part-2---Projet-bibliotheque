@@ -3,6 +3,7 @@
         <li><a href="/">Accueil</a></li>
         {% if not app.session.get('user') %}
             <li><a href="{{ path('login')}}">Login</a></li>
+             <li><a href="{{ path('inscription')}}">Inscription</a></li>
         {% else %}
             {% if 'ROLE_ADMIN' in app.session.get('user')['roles'] %}
                 <li><a href="{{ path('admin_user')}}">Liste des utilisateurs</a></li>
