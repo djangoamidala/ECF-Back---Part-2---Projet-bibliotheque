@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouveau livre{% endblock %}
+
+{% block body %}
+    <h1>Créer un nouveau livre</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.titre) }}
+            {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.annee_edition) }}
+            {{ form_widget(form.annee_edition, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.nombre_pages) }}
+            {{ form_widget(form.nombre_pages, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.code_isbn) }}
+            {{ form_widget(form.code_isbn, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.auteur_id) }}
+            {{ form_widget(form.auteur_id, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouvel emprunt{% endblock %}
+
+{% block body %}
+    <h1>Créer un nouvel emprunt</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.date_emprunt) }}
+        {{ form_row(form.date_retour) }}
+        {{ form_row(form.emprunteur_id) }}
+        {{ form_row(form.livre_id) }}
+
+
+    {{ form_end(form) }}
+{% endblock %}

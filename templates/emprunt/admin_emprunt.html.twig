@@ -3,7 +3,7 @@
 
 {% block body %}
     <h1>Liste des emprunts</h1>
-
+<a href="{{ path('admin_emprunt_create')}}">Ajouté un emprunt </a><br></br>
     <table>
         <thead>
             {% for emprunt in emprunts %}

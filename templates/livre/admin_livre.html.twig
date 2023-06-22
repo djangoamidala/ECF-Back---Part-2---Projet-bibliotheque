@@ -3,7 +3,7 @@
 
 {% block body %}
     <h1>Liste des livres</h1>
-
+<a href="{{ path('admin_livre_create')}}">Ajouté un livre</a><br></br>
     <table>
         <thead>
             {% for livre in livres %}

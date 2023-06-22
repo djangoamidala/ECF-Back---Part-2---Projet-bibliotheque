@@ -3,7 +3,7 @@
 
 {% block body %}
     <h1>Liste des users</h1>
-
+<a href="{{ path('admin_user_create')}}">Ajouté un user </a><br></br>
     <table>
         <thead>
             {% for user in users %}

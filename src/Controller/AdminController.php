@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 class AdminController extends AbstractController
 {
     private $db;
@@ -19,6 +21,69 @@ class AdminController extends AbstractController
     {
         $this->db = $db;
     }
+
+
+    
+/**
+ * @Route("/admin/livre/create", name="admin_livre_create")
+ */
+public function adminLivreCreate(Request $request, Connection $connection, SessionInterface $session): Response
+{
+    // Vérifier si l'utilisateur a le rôle 'ROLE_ADMIN' dans la session
+    if (!$session->has('user') || !isset($session->get('user')['roles']) || strpos($session->get('user')['roles'], 'ROLE_ADMIN') === false) {
+        throw $this->createAccessDeniedException('Accès refusé. Rôle administrateur requis.');
+    }
+
+    // Créer le formulaire
+    $form = $this->createFormBuilder()
+        ->add('titre', TextType::class, [
+            'label' => 'Titre :'
+        ])
+        ->add('annee_edition', IntegerType::class, [
+            'label' => 'Année d\'édition :'
+        ])
+        ->add('nombre_pages', IntegerType::class, [
+            'label' => 'Nombre de pages :'
+        ])
+        ->add('code_isbn', TextType::class, [
+            'label' => 'Code ISBN :'
+        ])
+        ->add('auteur_id', IntegerType::class, [
+            'label' => 'ID de l\'auteur :'
+        ])
+        ->add('save', SubmitType::class, [
+            'label' => 'Enregistrer'
+        ])
+        ->getForm();
+
+    // Gérer l'envoi du formulaire
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer les données du formulaire
+        $data = $form->getData();
+
+        // Insérer le nouveau livre dans la base de données
+        $connection->executeQuery(
+            "INSERT INTO livre (titre, annee_edition, nombre_pages, code_isbn, auteur_id)
+            VALUES (?, ?, ?, ?, ?)",
+            [
+                $data['titre'],
+                $data['annee_edition'],
+                $data['nombre_pages'],
+                $data['code_isbn'],
+                $data['auteur_id'],
+            ]
+        );
+
+        // Rediriger vers la page de liste des livres
+        return $this->redirectToRoute('admin_livre');
+    }
+
+    return $this->render('livre/admin_livre_create.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
 /**
  * @Route("/admin/livre", name="admin_livre")
  */
@@ -33,26 +98,8 @@ public function adminLivre(Connection $connection, SessionInterface $session): R
     $sql = 'SELECT * FROM livre';
     $livres = $connection->fetchAllAssociative($sql);
 
-    return $this->render('admin_livre.html.twig', [
+    return $this->render('livre/admin_livre.html.twig', [
         'livres' => $livres,
-    ]);
-}
-
-/**
- * @Route("/admin/emprunteur", name="admin_emprunt")
- */
-public function adminEmprunteur(Connection $connection, SessionInterface $session): Response
-{
-    // Vérifier si l'utilisateur a le rôle 'ROLE_ADMIN' dans la session
-    if (!$session->has('user') || !isset($session->get('user')['roles']) || strpos($session->get('user')['roles'], 'ROLE_ADMIN') === false) {
-        throw $this->createAccessDeniedException('Accès refusé. Rôle administrateur requis.');
-    }
-
-    $sql = 'SELECT * FROM emprunt';
-    $emprunts = $connection->fetchAllAssociative($sql);
-
-    return $this->render('admin_emprunt.html.twig', [
-        'emprunts' => $emprunts,
     ]);
 }
 
@@ -93,7 +140,7 @@ public function adminLivreEdit(Request $request, $id, SessionInterface $session)
     // Récupérer à nouveau la liste des livres depuis la base de données
     $livres = $this->db->fetchAllAssociative('SELECT * FROM livre');
 
-    return $this->render('admin_livre_edit.html.twig', [
+    return $this->render('livre/admin_livre_edit.html.twig', [
         'form' => $form->createView(),
         'livres' => $livres, // Passer la liste des livres à la vue
     ]);
@@ -118,8 +165,56 @@ public function admin_user(Connection $connection, SessionInterface $session)
     $sql = 'SELECT * FROM user';
     $users = $connection->fetchAllAssociative($sql);
 
-    return $this->render('admin_user.html.twig', [
+    return $this->render('users/admin_user.html.twig', [
         'users' => $users,
+    ]);
+}
+
+/**
+ * @Route("/admin/user/create", name="admin_user_create")
+ */
+public function adminUserCreate(Request $request, Connection $connection, SessionInterface $session): Response
+{
+    // Vérifier si l'utilisateur a le rôle 'ROLE_ADMIN' dans la session
+    if (!$session->has('user') || !isset($session->get('user')['roles']) || strpos($session->get('user')['roles'], 'ROLE_ADMIN') === false) {
+        throw $this->createAccessDeniedException('Accès refusé. Rôle administrateur requis.');
+    }
+
+    // Créer le formulaire
+    $form = $this->createFormBuilder()
+        ->add('email', TextType::class, [
+            'label' => 'Email :'
+        ])
+        ->add('password', PasswordType::class, [
+            'label' => 'Mot de passe :'
+        ])
+        ->add('roles', TextType::class, [
+            'label' => 'Rôles :'
+        ])
+        ->add('save', SubmitType::class, [
+            'label' => 'Enregistrer'
+        ])
+        ->getForm();
+
+    // Gérer l'envoi du formulaire
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer les données du formulaire
+        $data = $form->getData();
+
+        // Crypter le mot de passe
+        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        // Exécuter la requête SQL pour créer un nouvel utilisateur
+        $sql = 'INSERT INTO user (email, password, roles) VALUES (?, ?, ?)';
+        $connection->executeQuery($sql, [$data['email'], $hashedPassword, $data['roles']]);
+
+        // Rediriger vers la page de liste des utilisateurs ou une autre page
+        return $this->redirectToRoute('admin_user');
+    }
+
+    return $this->render('users/admin_user_create.html.twig', [
+        'form' => $form->createView(),
     ]);
 }
 
@@ -179,7 +274,7 @@ public function admin_user(Connection $connection, SessionInterface $session)
         // Récupérer à nouveau la liste des users depuis la base de données
         $users = $this->db->fetchAllAssociative('SELECT * FROM user');
 
-        return $this->render('admin_user_edit.html.twig', [
+        return $this->render('users/admin_user_edit.html.twig', [
             'form' => $form->createView(),
             'users' => $users, // Passer la liste des users à la vue
         ]);
@@ -210,6 +305,77 @@ public function updatePasswords(Connection $connection): Response
     return new Response('Mots de passe mis à jour.', Response::HTTP_OK);
 }
 
+/**
+ * @Route("/admin/emprunt/create", name="admin_emprunt_create")
+ */
+public function adminEmpruntCreate(Request $request, Connection $connection, SessionInterface $session): Response
+{
+    // Vérifier si l'utilisateur a le rôle "ROLE_ADMIN" dans la session
+    if (!$session->has('user') || !isset($session->get('user')['roles']) || strpos($session->get('user')['roles'], 'ROLE_ADMIN') === false) {
+        throw $this->createAccessDeniedException('Accès refusé. Rôle administrateur requis.');
+    }
+
+    // Créer un nouvel emprunt
+    $emprunt = [];
+
+    // Créer le formulaire
+    $form = $this->createFormBuilder($emprunt)
+        ->add('date_emprunt', TextType::class, [
+            'label' => 'date_emprunt :'
+        ])
+        ->add('date_retour', TextType::class, [
+            'label' => 'date_retour :'
+        ])
+        ->add('emprunteur_id', TextType::class, [
+            'label' => 'emprunteur_id :'
+        ])
+        ->add('livre_id', TextType::class, [
+            'label' => 'livre_id :'
+        ])
+        ->add('save', SubmitType::class, [
+            'label' => 'Enregistrer'
+        ])
+        ->getForm();
+
+    // Gérer l'envoi du formulaire
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer les données du formulaire
+        $nouveauNom = $form->getData()['date_emprunt'];
+        $nouveauPrenom = $form->getData()['date_retour'];
+        $nouveauTel = $form->getData()['emprunteur_id'];
+        $nouveauLivreId = $form->getData()['livre_id'];
+
+        // Insérer l'emprunt dans la base de données
+        $connection->executeQuery("INSERT INTO emprunt (date_emprunt, date_retour, emprunteur_id, livre_id) VALUES (?, ?, ?, ?)", [$nouveauNom, $nouveauPrenom, $nouveauTel, $nouveauLivreId]);
+
+        // Rediriger vers la page de liste des emprunts
+        return $this->redirectToRoute('admin_emprunt');
+    }
+
+    return $this->render('emprunt/admin_emprunt_create.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
+
+/**
+ * @Route("/admin/emprunteur", name="admin_emprunt")
+ */
+public function adminEmprunteur(Connection $connection, SessionInterface $session): Response
+{
+    // Vérifier si l'utilisateur a le rôle 'ROLE_ADMIN' dans la session
+    if (!$session->has('user') || !isset($session->get('user')['roles']) || strpos($session->get('user')['roles'], 'ROLE_ADMIN') === false) {
+        throw $this->createAccessDeniedException('Accès refusé. Rôle administrateur requis.');
+    }
+
+    $sql = 'SELECT * FROM emprunt';
+    $emprunts = $connection->fetchAllAssociative($sql);
+
+    return $this->render('emprunt/admin_emprunt.html.twig', [
+        'emprunts' => $emprunts,
+    ]);
+}
 
 /**
  * @Route("/admin/emprunt/{id}", name="admin_emprunt_details")
@@ -281,7 +447,7 @@ public function adminEmprunteurEdit(Request $request, $id, Connection $connectio
         return $this->redirectToRoute('admin_emprunt_details', ['id' => $id]);
     }
 
-    return $this->render('admin_emprunteur_edit.html.twig', [
+    return $this->render('emprunt/admin_emprunteur_edit.html.twig', [
         'form' => $form->createView(),
         'emprunteur' => $emprunt,
     ]);
@@ -310,4 +476,8 @@ public function adminEmprunteurDelete($id, Connection $connection, SessionInterf
     // Rediriger vers la page de liste des emprunteurs (uniquement accessible par l'admin)
     return $this->redirectToRoute('admin_emprunteur');
 }
+
+
+
+
 }
