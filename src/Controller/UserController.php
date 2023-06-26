@@ -1,5 +1,4 @@
 <?php
-// src/Controller/Controller.php
 
 // Ce fichier contient toutes les requêtes pour la table user 
 namespace App\Controller;
